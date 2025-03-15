@@ -2,47 +2,49 @@ body {
     padding-top: 70px;
 }
 
-.heading{
+.heading {
     margin-top: 30px;
     text-align: center;
 }
-.space-between{
+
+.space-between {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-.label-style{
+
+.label-style {
     font-size: 20px;
     margin-top: 30px;
 }
 
-.input-style{
+.input-style {
     padding: 5px;
     font-size: 20px !important;
     margin-top: 20px !important;
 }
 
-.btn-style{
+.btn-style {
     padding: 10px !important;
     font-size: 20px !important;
     margin-top: 20px !important;
 }
 
-.w-33{
+.w-33 {
     width: 32%;
 }
 
-.btn-gap{
+.btn-gap {
     margin-top: 50px !important;
 }
 
-.bot-label{
+.bot-label {
     margin-top: 20px;
     font-size: 25px;
     text-align: center;
 }
 
-.bot-image{
+.bot-image {
     display: flex;
     flex-direction: row;
     margin: auto;
@@ -52,21 +54,21 @@ body {
     border-width: 2px;
 }
 
-.bot-image:hover{
+.bot-image:hover {
     border-width: 5px;
 }
 
-canvas{
+canvas {
     border-style: solid;
     border-width: 3px;
 }
 
-.btn-start{
+.btn-start {
     border: none !important;
     background-color: #4CAF50 !important;
 }
 
-i{
+i {
     margin-left: 20px;
 }
 
@@ -94,7 +96,7 @@ i{
 
 .footer-text, .footer-link {
     text-decoration: none;
-    color:darkgray;
+    color: darkgray;
 }
 
 .footer-link:hover {
@@ -104,18 +106,17 @@ i{
 .card-footer-style {
     background-color: darkblue !important;
     color: white !important;
-    
 }
 
 .card-background {
-    background:  linear-gradient(50deg, rgb(191, 231, 241), #fff) !important;
+    background: linear-gradient(50deg, rgb(191, 231, 241), #fff) !important;
 }
 
 .card-background:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.signs{
+.signs {
     margin-top: 10px;
     height: 35px;
     color: white;
@@ -126,9 +127,37 @@ i{
 
 .hor-line {
     border: 0;
-    clear:both;
-    display:block;
-    width: 85%;               
+    clear: both;
+    display: block;
+    width: 85%;
     background-color: gainsboro;
     height: 1px;
+}
+
+/* Toggle Switch for Text and Speech Buttons */
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.toggle-switch button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0 5px;
+}
+
+.toggle-switch button.active {
+    background-color: #4CAF50; /* Green for active state */
+    color: white;
+}
+
+.toggle-switch button.inactive {
+    background-color: #f1f1f1; /* Light gray for inactive state */
+    color: #333;
 }

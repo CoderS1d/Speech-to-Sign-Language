@@ -1,198 +1,282 @@
-import '../App.css'
-import React, { useState, useEffect, useRef } from "react";
+import '../App.css';
+import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-input-slider';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-import xbot from '../Models/xbot/xbot.glb';
-import ybot from '../Models/ybot/ybot.glb';
-import xbotPic from '../Models/xbot/xbot.png';
-import ybotPic from '../Models/ybot/ybot.png';
+import ybot from '../Models/ybot/ybot.glb'; // Only Y Bot is used
+import ybotPic from '../Models/ybot/ybot.png'; // Only Y Bot image is used
 
 import * as words from '../Animations/words';
 import * as alphabets from '../Animations/alphabets';
 import { defaultPose } from '../Animations/defaultPose';
 
-import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 function Convert() {
-  const [text, setText] = useState("");
-  const [bot, setBot] = useState(ybot);
+  // State variables
+  const [text, setText] = useState('');
   const [speed, setSpeed] = useState(0.1);
   const [pause, setPause] = useState(800);
+  const [inputMode, setInputMode] = useState('text'); // 'text' or 'speech'
 
+  // Refs for DOM elements and Three.js objects
   const componentRef = useRef({});
   const { current: ref } = componentRef;
+  const textFromAudio = useRef(null);
+  const textFromInput = useRef(null);
 
-  let textFromInput = React.createRef();
+  // Speech recognition hook
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
 
+  // Initialize Three.js scene and load the avatar
   useEffect(() => {
     ref.flag = false;
     ref.pending = false;
-
     ref.animations = [];
     ref.characters = [];
 
+    // Set up Three.js scene
     ref.scene = new THREE.Scene();
     ref.scene.background = new THREE.Color(0xdddddd);
 
+    // Add lighting
     const spotLight = new THREE.SpotLight(0xffffff, 2);
     spotLight.position.set(0, 5, 5);
     ref.scene.add(spotLight);
-    ref.renderer = new THREE.WebGLRenderer({ antialias: true });
 
+    // Set up renderer
+    ref.renderer = new THREE.WebGLRenderer({ antialias: true });
     ref.camera = new THREE.PerspectiveCamera(
-        30,
-        window.innerWidth * 0.57 / (window.innerHeight - 70),
-        0.1,
-        1000
-    )
+      30,
+      (window.innerWidth * 0.57) / (window.innerHeight - 70),
+      0.1,
+      1000
+    );
     ref.renderer.setSize(window.innerWidth * 0.57, window.innerHeight - 70);
 
-    document.getElementById("canvas").innerHTML = "";
-    document.getElementById("canvas").appendChild(ref.renderer.domElement);
+    // Append renderer to the DOM
+    const canvasContainer = document.getElementById('canvas');
+    canvasContainer.innerHTML = '';
+    canvasContainer.appendChild(ref.renderer.domElement);
 
+    // Position the camera
     ref.camera.position.z = 1.6;
     ref.camera.position.y = 1.4;
 
-    let loader = new GLTFLoader();
+    // Load the Y Bot avatar
+    const loader = new GLTFLoader();
     loader.load(
-      bot,
+      ybot,
       (gltf) => {
         gltf.scene.traverse((child) => {
-          if ( child.type === 'SkinnedMesh' ) {
+          if (child.type === 'SkinnedMesh') {
             child.frustumCulled = false;
           }
         });
         ref.avatar = gltf.scene;
         ref.scene.add(ref.avatar);
-        defaultPose(ref);
+        defaultPose(ref); // Set default pose
       },
       (xhr) => {
-        console.log(xhr);
+        console.log('Loading progress:', (xhr.loaded / xhr.total) * 100 + '%');
+      },
+      (error) => {
+        console.error('Error loading model:', error);
       }
     );
-  }, [ref, bot]);
+  }, [ref]);
 
+  // Animation loop
   ref.animate = () => {
-    if(ref.animations.length === 0){
-        ref.pending = false;
-      return ;
+    if (ref.animations.length === 0) {
+      ref.pending = false;
+      return;
     }
     requestAnimationFrame(ref.animate);
-    if(ref.animations[0].length){
-        if(!ref.flag) {
-          if(ref.animations[0][0]==='add-text'){
-            setText(text + ref.animations[0][1]);
-            ref.animations.shift();
-          }
-          else{
-            for(let i=0;i<ref.animations[0].length;){
-              let [boneName, action, axis, limit, sign] = ref.animations[0][i]
-              if(sign === "+" && ref.avatar.getObjectByName(boneName)[action][axis] < limit){
-                  ref.avatar.getObjectByName(boneName)[action][axis] += speed;
-                  ref.avatar.getObjectByName(boneName)[action][axis] = Math.min(ref.avatar.getObjectByName(boneName)[action][axis], limit);
-                  i++;
-              }
-              else if(sign === "-" && ref.avatar.getObjectByName(boneName)[action][axis] > limit){
-                  ref.avatar.getObjectByName(boneName)[action][axis] -= speed;
-                  ref.avatar.getObjectByName(boneName)[action][axis] = Math.max(ref.avatar.getObjectByName(boneName)[action][axis], limit);
-                  i++;
-              }
-              else{
-                  ref.animations[0].splice(i, 1);
-              }
+
+    if (ref.animations[0].length) {
+      if (!ref.flag) {
+        if (ref.animations[0][0] === 'add-text') {
+          setText((prevText) => prevText + ref.animations[0][1]);
+          ref.animations.shift();
+        } else {
+          for (let i = 0; i < ref.animations[0].length; ) {
+            const [boneName, action, axis, limit, sign] = ref.animations[0][i];
+            const bone = ref.avatar.getObjectByName(boneName);
+
+            if (sign === '+' && bone[action][axis] < limit) {
+              bone[action][axis] += speed;
+              bone[action][axis] = Math.min(bone[action][axis], limit);
+              i++;
+            } else if (sign === '-' && bone[action][axis] > limit) {
+              bone[action][axis] -= speed;
+              bone[action][axis] = Math.max(bone[action][axis], limit);
+              i++;
+            } else {
+              ref.animations[0].splice(i, 1);
             }
           }
         }
-    }
-    else {
+      }
+    } else {
       ref.flag = true;
       setTimeout(() => {
-        ref.flag = false
+        ref.flag = false;
       }, pause);
       ref.animations.shift();
     }
     ref.renderer.render(ref.scene, ref.camera);
-  }
+  };
 
+  // Process input text or speech
   const sign = (inputRef) => {
-    var str = inputRef.current.value.toUpperCase();
-    var strWords = str.split(' ');
-    setText('')
+    const str = inputRef.current.value.toUpperCase();
+    const strWords = str.split(' ');
+    setText('');
 
-    for(let word of strWords){
-      if(words[word]){
-        ref.animations.push(['add-text', word+' ']);
+    strWords.forEach((word) => {
+      if (words[word]) {
+        ref.animations.push(['add-text', word + ' ']);
         words[word](ref);
-      }
-      else{
-        for(const [index, ch] of word.split('').entries()){
-          if(index === word.length-1)
-            ref.animations.push(['add-text', ch+' ']);
-          else 
-            ref.animations.push(['add-text', ch]);
+      } else {
+        word.split('').forEach((ch, index) => {
+          ref.animations.push(['add-text', index === word.length - 1 ? ch + ' ' : ch]);
           alphabets[ch](ref);
-        }
+        });
       }
+    });
+  };
+
+  // Start/stop speech recognition
+  const toggleListening = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      SpeechRecognition.startListening({ continuous: true });
     }
-  }
+  };
 
   return (
-    <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-md-3'>
-          <label className='label-style'>
-            Processed Text
-          </label>
-          <textarea rows={3} value={text} className='w-100 input-style' readOnly />
+    <div className="container-fluid">
+      <div className="row">
+        {/* Left Column: Controls */}
+        <div className="col-md-3">
+          {/* Toggle Switch for Text and Speech */}
+          <div className="toggle-switch">
+            <button
+              className={`btn ${inputMode === 'text' ? 'btn-primary active' : 'btn-secondary inactive'}`}
+              onClick={() => setInputMode('text')}
+            >
+              Text
+            </button>
+            <button
+              className={`btn ${inputMode === 'speech' ? 'btn-primary active' : 'btn-secondary inactive'}`}
+              onClick={() => setInputMode('speech')}
+            >
+              Speech
+            </button>
+          </div>
 
-          <label className='label-style'>
-            Text Input
-          </label>
-          <textarea rows={3} ref={textFromInput} placeholder='Enter text here...' className='w-100 input-style' />
-          <button onClick={() => {sign(textFromInput)}} className='btn btn-primary w-100 btn-style btn-start'>
-            Start Animations
-          </button>
-        </div>
-        <div className='col-md-7'>
-          <div id='canvas'/>
-        </div>
-        <div className='col-md-2'>
-          <p className='bot-label'>
-            Select Avatar
-          </p>
-          <img src={xbotPic} className='bot-image col-md-11' onClick={()=>{setBot(xbot)}} alt='Avatar 1: XBOT'/>
-          <img src={ybotPic} className='bot-image col-md-11' onClick={()=>{setBot(ybot)}} alt='Avatar 2: YBOT'/>
-          <p className='label-style'>
-            Animation Speed: {Math.round(speed*100)/100}
-          </p>
-          <Slider
-            axis="x"
-            xmin={0.05}
-            xmax={0.50}
-            xstep={0.01}
-            x={speed}
-            onChange={({ x }) => setSpeed(x)}
-            className='w-100'
+          {/* Text Input Section */}
+          {inputMode === 'text' && (
+            <>
+              <label className="label-style">Text Input</label>
+              <textarea
+                rows={3}
+                ref={textFromInput}
+                placeholder="Enter text here..."
+                className="w-100 input-style"
+              />
+              <button
+                onClick={() => sign(textFromInput)}
+                className="btn btn-primary w-100 btn-style btn-start"
+              >
+                Start Animations
+              </button>
+            </>
+          )}
+
+          {/* Speech Input Section */}
+          {inputMode === 'speech' && (
+            <>
+              <label className="label-style">
+                Speech Recognition: {listening ? 'ON' : 'OFF'}
+              </label>
+              <div className="space-between">
+                <button
+                  className="btn btn-primary btn-style w-33"
+                  onClick={toggleListening}
+                >
+                  {listening ? 'Mic Off' : 'Mic On'} <i className={`fa fa-microphone${listening ? '' : '-slash'}`} />
+                </button>
+                <button
+                  className="btn btn-primary btn-style w-33"
+                  onClick={resetTranscript}
+                >
+                  Clear
+                </button>
+              </div>
+              <textarea
+                rows={3}
+                ref={textFromAudio}
+                value={transcript}
+                placeholder="Speech input will appear here..."
+                className="w-100 input-style"
+              />
+              <button
+                onClick={() => sign(textFromAudio)}
+                className="btn btn-primary w-100 btn-style btn-start"
+              >
+                Start Animations
+              </button>
+            </>
+          )}
+
+          {/* Processed Text Section */}
+          <label className="label-style">Processed Text</label>
+          <textarea
+            rows={3}
+            value={text}
+            className="w-100 input-style"
+            readOnly
           />
-          <p className='label-style'>
-            Pause time: {pause} ms
-          </p>
-          <Slider
-            axis="x"
-            xmin={0}
-            xmax={2000}
-            xstep={100}
-            x={pause}
-            onChange={({ x }) => setPause(x)}
-            className='w-100'
-          />
+
+          {/* Animation Controls */}
+          <div>
+            <p className="label-style">Animation Speed: {Math.round(speed * 100) / 100}</p>
+            <Slider
+              axis="x"
+              xmin={0.05}
+              xmax={0.5}
+              xstep={0.01}
+              x={speed}
+              onChange={({ x }) => setSpeed(x)}
+              className="w-100"
+            />
+            <p className="label-style">Pause Time: {pause} ms</p>
+            <Slider
+              axis="x"
+              xmin={0}
+              xmax={2000}
+              xstep={100}
+              x={pause}
+              onChange={({ x }) => setPause(x)}
+              className="w-100"
+            />
+          </div>
+        </div>
+
+        {/* Right Column: Canvas */}
+        <div className="col-md-9">
+          <div id="canvas" />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Convert;
