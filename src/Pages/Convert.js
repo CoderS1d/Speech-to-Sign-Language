@@ -52,11 +52,11 @@ function Convert() {
     ref.renderer = new THREE.WebGLRenderer({ antialias: true });
     ref.camera = new THREE.PerspectiveCamera(
       30,
-      (window.innerWidth * 0.57) / (window.innerHeight - 70),
+      (window.innerWidth * 0.5) / (window.innerHeight - 60),
       0.1,
       1000
     );
-    ref.renderer.setSize(window.innerWidth * 0.57, window.innerHeight - 70);
+    ref.renderer.setSize(window.innerWidth * 0.56, window.innerHeight * 0.7); // for canvas size
 
     // Append renderer to the DOM
     const canvasContainer = document.getElementById('canvas');
@@ -100,25 +100,20 @@ function Convert() {
 
     if (ref.animations[0].length) {
       if (!ref.flag) {
-        if (ref.animations[0][0] === 'add-text') {
-          setText((prevText) => prevText + ref.animations[0][1]);
-          ref.animations.shift();
-        } else {
-          for (let i = 0; i < ref.animations[0].length; ) {
-            const [boneName, action, axis, limit, sign] = ref.animations[0][i];
-            const bone = ref.avatar.getObjectByName(boneName);
+        for (let i = 0; i < ref.animations[0].length; ) {
+          const [boneName, action, axis, limit, sign] = ref.animations[0][i];
+          const bone = ref.avatar.getObjectByName(boneName);
 
-            if (sign === '+' && bone[action][axis] < limit) {
-              bone[action][axis] += speed;
-              bone[action][axis] = Math.min(bone[action][axis], limit);
-              i++;
-            } else if (sign === '-' && bone[action][axis] > limit) {
-              bone[action][axis] -= speed;
-              bone[action][axis] = Math.max(bone[action][axis], limit);
-              i++;
-            } else {
-              ref.animations[0].splice(i, 1);
-            }
+          if (sign === '+' && bone[action][axis] < limit) {
+            bone[action][axis] += speed;
+            bone[action][axis] = Math.min(bone[action][axis], limit);
+            i++;
+          } else if (sign === '-' && bone[action][axis] > limit) {
+            bone[action][axis] -= speed;
+            bone[action][axis] = Math.max(bone[action][axis], limit);
+            i++;
+          } else {
+            ref.animations[0].splice(i, 1);
           }
         }
       }
@@ -136,16 +131,14 @@ function Convert() {
   const sign = (inputRef) => {
     const str = inputRef.current.value.toUpperCase();
     const strWords = str.split(' ');
-    setText('');
+    setText(str); // Directly set the input text to the state
 
     strWords.forEach((word) => {
       if (words[word]) {
-        ref.animations.push(['add-text', word + ' ']);
-        words[word](ref);
+        words[word](ref); // Add word animation to the queue
       } else {
-        word.split('').forEach((ch, index) => {
-          ref.animations.push(['add-text', index === word.length - 1 ? ch + ' ' : ch]);
-          alphabets[ch](ref);
+        word.split('').forEach((ch) => {
+          alphabets[ch](ref); // Add alphabet animation to the queue
         });
       }
     });
@@ -163,8 +156,8 @@ function Convert() {
   return (
     <div className="container-fluid">
       <div className="row">
-        {/* Left Column: Controls */}
-        <div className="col-md-3">
+        {/* Left Column: Input Details */}
+        <div className="col-md-4">
           {/* Toggle Switch for Text and Speech */}
           <div className="toggle-switch">
             <button
@@ -236,15 +229,6 @@ function Convert() {
             </>
           )}
 
-          {/* Processed Text Section */}
-          <label className="label-style">Processed Text</label>
-          <textarea
-            rows={3}
-            value={text}
-            className="w-100 input-style"
-            readOnly
-          />
-
           {/* Animation Controls */}
           <div>
             <p className="label-style">Animation Speed: {Math.round(speed * 100) / 100}</p>
@@ -270,8 +254,23 @@ function Convert() {
           </div>
         </div>
 
-        {/* Right Column: Canvas */}
-        <div className="col-md-9">
+        {/* Vertical Divider */}
+        <div className="col-md-1 vertical-divider"></div>
+
+        {/* Right Column: Processed Text and Avatar */}
+        <div className="col-md-7">
+          {/* Processed Text and Text Box */}
+          <div className="processed-text-container">
+            <label className="label-style processed-text-label">Processed Text:</label>
+            <textarea
+              rows={3}
+              value={text}
+              className="processed-text-box"
+              readOnly
+            />
+          </div>
+
+          {/* Canvas for Avatar */}
           <div id="canvas" />
         </div>
       </div>

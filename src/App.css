@@ -1,47 +1,77 @@
 body {
     padding-top: 70px;
+    background-color: #f8f9fa; /* Light background for the page */
 }
 
 .heading {
     margin-top: 30px;
     text-align: center;
+    font-size: 2rem;
+    color: #333;
 }
 
 .space-between {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 .label-style {
-    font-size: 20px;
-    margin-top: 30px;
+    font-size: 18px;
+    margin-top: 20px;
+    color: #555;
+    font-weight: 500;
 }
 
 .input-style {
-    padding: 5px;
-    font-size: 20px !important;
-    margin-top: 20px !important;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-style:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    outline: none;
 }
 
 .btn-style {
-    padding: 10px !important;
-    font-size: 20px !important;
-    margin-top: 20px !important;
+    padding: 12px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-style:hover {
+    transform: translateY(-2px);
+}
+
+.btn-start {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-start:hover {
+    background-color: #45a049;
 }
 
 .w-33 {
     width: 32%;
 }
 
-.btn-gap {
-    margin-top: 50px !important;
-}
-
 .bot-label {
     margin-top: 20px;
     font-size: 25px;
     text-align: center;
+    color: #333;
 }
 
 .bot-image {
@@ -50,48 +80,46 @@ body {
     margin: auto;
     margin-top: 10px;
     border-radius: 30px;
-    border-style: solid;
-    border-width: 2px;
+    border: 2px solid #ddd;
+    transition: border-color 0.3s;
 }
 
 .bot-image:hover {
-    border-width: 5px;
+    border-color: #4CAF50;
 }
 
 canvas {
-    border-style: solid;
-    border-width: 3px;
-}
-
-.btn-start {
-    border: none !important;
-    background-color: #4CAF50 !important;
-}
-
-i {
-    margin-left: 20px;
+    margin-top: 10px;
+    border: 3px solid #ddd;
+    border-radius: 12px;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .home-gradient {
-    background: rgb(33,37,41);
-    background: linear-gradient(180deg, rgba(33,37,41,1) 6%, rgba(9,9,121,1) 45%, rgba(12,186,235,0.5186449579831933) 100%);
+    background: linear-gradient(180deg, rgba(33, 37, 41, 1) 6%, rgba(9, 9, 121, 1) 45%, rgba(12, 186, 235, 0.52) 100%);
     height: calc(100vh - 70px);
-    flex-direction: column
+    flex-direction: column;
 }
 
 .divider {
     display: block;
     height: 4px;
-    width: 5rem !important;
+    width: 5rem;
     background: #f76c2f;
+    margin: 20px auto;
 }
 
 .section-heading {
-    color: red;
+    color: #f76c2f;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
 }
 
 .normal-text {
-    font-size: large;
+    font-size: 16px;
+    color: #555;
 }
 
 .footer-text, .footer-link {
@@ -104,16 +132,19 @@ i {
 }
 
 .card-footer-style {
-    background-color: darkblue !important;
-    color: white !important;
+    background-color: darkblue;
+    color: white;
 }
 
 .card-background {
-    background: linear-gradient(50deg, rgb(191, 231, 241), #fff) !important;
+    background: linear-gradient(50deg, rgb(191, 231, 241), #fff);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
 }
 
 .card-background:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .signs {
@@ -121,8 +152,15 @@ i {
     height: 35px;
     color: white;
     font-weight: bold;
-    background-color: blue;
-    border-radius: 5px;
+    background-color: #4CAF50;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.signs:hover {
+    background-color: #45a049;
 }
 
 .hor-line {
@@ -130,8 +168,9 @@ i {
     clear: both;
     display: block;
     width: 85%;
-    background-color: gainsboro;
+    background-color: #ddd;
     height: 1px;
+    margin: 20px auto;
 }
 
 /* Toggle Switch for Text and Speech Buttons */
@@ -140,24 +179,144 @@ i {
     align-items: center;
     justify-content: center;
     margin-top: 20px;
+    gap: 10px;
 }
 
 .toggle-switch button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    flex: 1;
 }
 
 .toggle-switch button.active {
-    background-color: #4CAF50; /* Green for active state */
+    background-color: #4eaf4c;
     color: white;
+    transform: translateY(-2px);
 }
 
 .toggle-switch button.inactive {
-    background-color: #f1f1f1; /* Light gray for inactive state */
+    background-color: #f1f1f1;
     color: #333;
+}
+
+.toggle-switch button:hover {
+    transform: translateY(-2px);
+}
+
+/* Slider Styling */
+.react-input-slider {
+    margin-top: 10px;
+    border-radius: 8px;
+    background: #ddd;
+}
+
+.react-input-slider .handle {
+    background: #4CAF50;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.react-input-slider .handle:hover {
+    background: #45a049;
+}
+
+.vertical-divider {
+    border-left: 2px solid #ddd;
+    height: 100vh;
+    margin: 0 auto;
+}
+
+/* Adjust column widths and padding */
+.col-md-4 {
+    padding-right: 20px;
+}
+
+.col-md-7 {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: flex-start; /* Align content to the top */
+}
+
+/* Processed Text Section */
+.col-md-7 .label-style {
+    text-align: center; /* Center the label */
+    margin-top: 20px;
+}
+
+.col-md-7 textarea {
+    width: 90%; /* Reduce width to make it look centered */
+    margin-top: 10px;
+}
+
+/* Canvas for Avatar */
+#canvas {
+    width: 90%; /* Reduce width to make it look centered */
+    margin-top: 20px;
+    border: 3px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Column */
+.col-md-7 {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align content to the left */
+}
+
+/* Processed Text Container */
+.processed-text-container {
+    display: flex;
+    align-items: center; /* Align label and text box vertically */
+    width: 100%; /* Match the width of the avatar */
+    margin-bottom: 20px; /* Space between text box and avatar */
+    margin-left: -50px;
+}
+
+/* Processed Text Label */
+.processed-text-label {
+    margin-right: 10px; /* Space between label and text box */
+    white-space: nowrap; /* Prevent label from wrapping */
+    font-size: 18px;
+    color: #555;
+    height: 40px; /* Match the height of the text box */
+    display: flex;
+    align-items: center; /* Vertically center the label text */
+}
+
+/* Processed Text Box */
+.processed-text-box {
+    flex: 1; /* Take remaining space */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    height: 50px; /* Set a fixed height to match the label */
+    resize: none; /* Prevent resizing */
+}
+
+.processed-text-box:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    outline: none;
+}
+
+/* Canvas for Avatar */
+#canvas {
+    width: 100%; /* Match the width of the text box */
+    margin-top: 20px;
+    border: 3px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: -50px; /* Move canvas slightly to the left */
 }
