@@ -14,6 +14,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
+import posTagger from 'wink-pos-tagger';
+
 function Convert() {
   const [text, setText] = useState('');
   const [speed, setSpeed] = useState(0.1);
@@ -87,7 +89,7 @@ function Convert() {
 
     if (ref.animations[0].length) {
       if (!ref.flag) {
-        for (let i = 0; i < ref.animations[0].length; ) {
+        for (let i = 0; i < ref.animations[0].length;) {
           const [boneName, action, axis, limit, sign] = ref.animations[0][i];
           const bone = ref.avatar.getObjectByName(boneName);
 
@@ -115,20 +117,55 @@ function Convert() {
   };
 
   const sign = (inputRef) => {
-    const str = inputRef.current.value.toUpperCase();
-    const strWords = str.split(' ');
-    setText(str);
+    const sentences = inputRef.current.value
+      .split(/[.?!]/)
+      .filter(sentence => sentence.trim() !== '');
+    const processedSentences = sentences.map(sentence => {
+      const tagger = posTagger();
+      const taggedWords = tagger.tagSentence(sentence.trim());
+      const verbTags = ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"];
+      const rearrangedWords = taggedWords.reduce((acc, word) => {
+        if (verbTags.includes(word.pos)) {
+          if (word.lemma && !['be'].includes(word.lemma)) {
+            acc.verbs.push({ ...word, value: word.lemma || word.value });
+          }
+        } else if (word.pos === 'WP' || word.pos.startsWith('WH') || word.pos.startsWith('WR')) {
+          acc.whWords.push(word);
+        } else if (['NN', 'NNS', 'NNP', 'NNPS', 'PRP', 'JJ', 'JJR', 'JJS'].includes(word.pos)) {
+          if (acc.subjects.length === 0) {
+            acc.subjects.push(word);
+          } else {
+            acc.objects.push(word);
+          }
+        }
+        return acc;
+      }, { subjects: [], objects: [], verbs: [], whWords: [] });
+      const processedSentence = [
+        ...rearrangedWords.whWords,
+        ...rearrangedWords.subjects,
+        ...rearrangedWords.objects,
+        ...rearrangedWords.verbs,
 
-    strWords.forEach((word) => {
-      if (words[word]) {
-        words[word](ref);
-      } else {
-        word.split('').forEach((ch) => {
-          alphabets[ch](ref);
-        });
-      }
+      ];
+      return processedSentence
+        .map(word => word.value.toUpperCase())
+        .join(' ');
+    });
+    setText(processedSentences.join('. '));
+    processedSentences.forEach(sentence => {
+      const sentenceWords = sentence.split(' ');
+      sentenceWords.forEach((word) => {
+        if (words[word]) {
+          words[word](ref);
+        } else {
+          word.split('').forEach((ch) => {
+            alphabets[ch](ref);
+          });
+        }
+      });
     });
   };
+
 
   const toggleListening = () => {
     if (listening) {
