@@ -1,6 +1,6 @@
 body {
     padding-top: 70px;
-    background-color: #f8f9fa; /* Light background for the page */
+    background-color: #2b2b2b !important; 
 }
 
 .heading {
@@ -20,7 +20,7 @@ body {
 .label-style {
     font-size: 18px;
     margin-top: 20px;
-    color: #555;
+    color: #faf5f5;
     font-weight: 500;
 }
 
@@ -40,172 +40,156 @@ body {
     outline: none;
 }
 
-.btn-style {
-    padding: 12px 20px;
-    font-size: 16px;
-    margin-top: 20px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+/* Modern Button Styles */
+.animated-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 28px;
+  border: 3px solid;
+  border-color: transparent;
+  font-size: 15px;
+  background-color: inherit;
+  border-radius: 100px;
+  font-weight: 600;
+  color: greenyellow;
+  box-shadow: 0 0 0 2px greenyellow;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  width: 100%;
+  margin-top: 20px;
 }
 
-.btn-style:hover {
-    transform: translateY(-2px);
+.animated-button svg {
+  position: absolute;
+  width: 20px;
+  fill: greenyellow;
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.btn-start {
-    background-color: #4CAF50;
-    color: white;
+.animated-button .arr-1 {
+  right: 12px;
 }
 
-.btn-start:hover {
-    background-color: #45a049;
+.animated-button .arr-2 {
+  left: -25%;
 }
 
-.w-33 {
-    width: 32%;
+.animated-button .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: greenyellow;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.bot-label {
-    margin-top: 20px;
-    font-size: 25px;
-    text-align: center;
-    color: #333;
+.animated-button .text {
+  position: relative;
+  z-index: 1;
+  transform: translateX(-8px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.bot-image {
-    display: flex;
-    flex-direction: row;
-    margin: auto;
-    margin-top: 10px;
-    border-radius: 30px;
-    border: 2px solid #ddd;
-    transition: border-color 0.3s;
+.animated-button:hover {
+  box-shadow: 0 0 0 10px transparent;
+  color: #212121;
+  border-radius: 10px;
 }
 
-.bot-image:hover {
-    border-color: #4CAF50;
+.animated-button:hover .arr-1 {
+  right: -25%;
 }
 
-canvas {
-    margin-top: 10px;
-    border: 3px solid #ddd;
-    border-radius: 12px;
-    width: 100%;
-    height: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.animated-button:hover .arr-2 {
+  left: 12px;
 }
 
-.home-gradient {
-    background: linear-gradient(180deg, rgba(33, 37, 41, 1) 6%, rgba(9, 9, 121, 1) 45%, rgba(12, 186, 235, 0.52) 100%);
-    height: calc(100vh - 70px);
-    flex-direction: column;
+.animated-button:hover .text {
+  transform: translateX(8px);
 }
 
-.divider {
-    display: block;
-    height: 4px;
-    width: 5rem;
-    background: #f76c2f;
-    margin: 20px auto;
+.animated-button:hover svg {
+  fill: #212121;
 }
 
-.section-heading {
-    color: #f76c2f;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+.animated-button:active {
+  scale: 0.95;
+  box-shadow: 0 0 0 3px greenyellow;
 }
 
-.normal-text {
-    font-size: 16px;
-    color: #555;
+.animated-button:hover .circle {
+  width: 200px;
+  height: 200px;
+  opacity: 1;
 }
 
-.footer-text, .footer-link {
-    text-decoration: none;
-    color: darkgray;
+/* Smaller buttons for mic and clear */
+.small-animated-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  width: auto;
 }
 
-.footer-link:hover {
-    color: white;
-}
-
-.card-footer-style {
-    background-color: darkblue;
-    color: white;
-}
-
-.card-background {
-    background: linear-gradient(50deg, rgb(191, 231, 241), #fff);
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s;
-}
-
-.card-background:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.signs {
-    margin-top: 10px;
-    height: 35px;
-    color: white;
-    font-weight: bold;
-    background-color: #4CAF50;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.signs:hover {
-    background-color: #45a049;
-}
-
-.hor-line {
-    border: 0;
-    clear: both;
-    display: block;
-    width: 85%;
-    background-color: #ddd;
-    height: 1px;
-    margin: 20px auto;
-}
-
-/* Toggle Switch for Text and Speech Buttons */
+/* Toggle Switch Styles */
 .toggle-switch {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 10px;
+    position: relative;
+    width: 180px;
+    height: 44px;
+    background-color: #444;
+    border-radius: 30px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 84px;
+    height: 38px;
+    background-color: #4CAF50;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.toggle-switch.text-active::before {
+    transform: translateX(0);
+}
+
+.toggle-switch.speech-active::before {
+    transform: translateX(90px);
 }
 
 .toggle-switch button {
-    padding: 12px 24px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, transform 0.2s;
     flex: 1;
+    border: none;
+    background: transparent;
+    color: #ddd;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.3s;
+    padding: 0;
 }
 
 .toggle-switch button.active {
-    background-color: #4eaf4c;
     color: white;
-    transform: translateY(-2px);
 }
 
-.toggle-switch button.inactive {
-    background-color: #f1f1f1;
-    color: #333;
-}
 
-.toggle-switch button:hover {
-    transform: translateY(-2px);
-}
 
 /* Slider Styling */
 .react-input-slider {
@@ -226,7 +210,7 @@ canvas {
 }
 
 .vertical-divider {
-    border-left: 2px solid #ddd;
+    border-left: 2px solid #575753;
     height: 100vh;
     margin: 0 auto;
 }
@@ -240,26 +224,27 @@ canvas {
     padding-left: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center content horizontally */
-    justify-content: flex-start; /* Align content to the top */
+    align-items: center;
+    justify-content: flex-start;
 }
 
 /* Processed Text Section */
 .col-md-7 .label-style {
-    text-align: center; /* Center the label */
+    text-align: center;
     margin-top: 20px;
+    color: #ddd;
 }
 
 .col-md-7 textarea {
-    width: 90%; /* Reduce width to make it look centered */
+    width: 90%;
     margin-top: 10px;
 }
 
 /* Canvas for Avatar */
 #canvas {
-    width: 90%; /* Reduce width to make it look centered */
+    width: 90%;
     margin-top: 20px;
-    border: 3px solid #ddd;
+    border: 3px solid #2b2b2b!important;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -269,40 +254,40 @@ canvas {
     padding-left: 20px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align content to the left */
+    align-items: flex-start;
 }
 
 /* Processed Text Container */
 .processed-text-container {
     display: flex;
-    align-items: center; /* Align label and text box vertically */
-    width: 100%; /* Match the width of the avatar */
-    margin-bottom: 20px; /* Space between text box and avatar */
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
     margin-left: -50px;
 }
 
 /* Processed Text Label */
 .processed-text-label {
-    margin-right: 10px; /* Space between label and text box */
-    white-space: nowrap; /* Prevent label from wrapping */
+    margin-right: 10px;
+    white-space: nowrap;
     font-size: 18px;
     color: #555;
-    height: 40px; /* Match the height of the text box */
+    height: 40px;
     display: flex;
-    align-items: center; /* Vertically center the label text */
+    align-items: center;
 }
 
 /* Processed Text Box */
 .processed-text-box {
-    flex: 1; /* Take remaining space */
+    flex: 1;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
-    height: 50px; /* Set a fixed height to match the label */
-    resize: none; /* Prevent resizing */
+    height: 50px;
+    resize: none;
 }
 
 .processed-text-box:focus {
@@ -313,10 +298,10 @@ canvas {
 
 /* Canvas for Avatar */
 #canvas {
-    width: 100%; /* Match the width of the text box */
+    width: 100%;
     margin-top: 20px;
-    border: 3px solid #ddd;
+    border: 3px solid #2b2b2b !important;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: -50px; /* Move canvas slightly to the left */
+    margin-left: -50px;
 }

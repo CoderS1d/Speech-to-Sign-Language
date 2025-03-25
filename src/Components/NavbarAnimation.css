@@ -1,0 +1,63 @@
+/* Navbar Animation Styles */
+.navbar-animation {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+  }
+  
+  .navbar-animation svg {
+    position: absolute;
+    transition: .5s;
+    z-index: calc(1 - (0.2 * var(--j)));
+    transform-origin: center;
+    width: 44px;
+    height: 44px;
+    fill: none;
+  }
+  
+  .navbar-animation:hover svg {
+    transform: rotate(-80deg) skew(30deg) translateX(calc(5px * var(--i))) translateY(calc(-5px * var(--i)));
+  }
+  
+  .navbar-animation svg #center {
+    transition: .5s;
+    transform-origin: center;
+  }
+  
+  .navbar-animation:hover svg #center {
+    transform: rotate(-30deg) translateX(5px) translateY(-3px);
+  }
+  
+  .navbar-animation #out2 {
+    animation: rotate16 7s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+  
+  .navbar-animation #out3 {
+    animation: rotate16 3s ease-in-out infinite alternate;
+    transform-origin: center;
+    stroke: #ff0;
+  }
+  
+  .navbar-animation #inner3,
+  .navbar-animation #inner1 {
+    animation: rotate16 4s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+  
+  .navbar-animation #center1 {
+    fill: #ff0;
+    animation: rotate16 2s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+  
+  @keyframes rotate16 {
+    to {
+      transform: rotate(360deg);
+    }
+  }
