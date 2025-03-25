@@ -11,8 +11,6 @@ import CreateVideo from './Pages/CreateVideo';
 import Footer from './Components/Footer';
 import Videos from './Pages/Videos';
 import Feedback from './Pages/Feedback';
-import LoadAvatar  from './Pages/test';
-import Con  from './Pages/Convert_fbx';
 function App() {
   return (
     <Router>
@@ -28,7 +26,6 @@ function App() {
           <Route exact path="/sign-kit/video/:videoId" element={<Video />} />
           <Route exact path="/sign-kit/create-video" element={<CreateVideo />} />
           <Route exact path="/sign-kit/feedback" element={<Feedback />} />
-          <Route exact path="/sign-kit/test" element={<LoadAvatar />} />
           <Route exact path="*" element={<Navigate to="/sign-kit/home" />} />
         </Routes>
         <Footer />
