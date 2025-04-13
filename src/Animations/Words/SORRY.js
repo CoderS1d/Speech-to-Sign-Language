@@ -1,4 +1,4 @@
-export const PLEASE = (ref) => {
+export const SORRY = (ref) => {
     let animations = [];
 
     // Step 1: Move hand to the chest
@@ -17,7 +17,6 @@ export const PLEASE = (ref) => {
     // Step 2: Wrist Motion (Left-to-Right)
     animations.push(["mixamorigRightHand", "rotation", "y", Math.PI / 6, "+"]); // Move wrist right
     ref.animations.push(animations);
-    
     animations = [];
 
     animations.push(["mixamorigRightHand", "rotation", "y", -Math.PI / 9, "-"]); // Move wrist left

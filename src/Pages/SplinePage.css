@@ -1,0 +1,103 @@
+/* Makes the body scrollable */
+body {
+    overflow: auto;
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* Hide the scrollbar */
+  ::-webkit-scrollbar {
+    width: 0px;  /* Set width to 0 to hide the scrollbar */
+    height: 0px; /* For horizontal scrollbar */
+  }
+  
+  .spline-wrapper {
+    background-color: #0c1020;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden; /* Ensures iframe does not cause scrolling */
+  }
+  
+  .spline-container {
+    position: absolute;
+    top: -10vh;  /* Moves the iframe 10vh above its normal position */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .spline-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  .spline-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    max-width: 700px;
+    color: white;
+    margin-top: 20vh;  /* Content starts 20vh below */
+    margin-left: 5vw;
+  }
+  
+  .headline {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(to right, #3b82f6, #9333ea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .description {
+    font-size: 1.125rem;
+    color: #d1d5db;
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .cta-button {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 999px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .cta-button.primary {
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .cta-button.primary:hover {
+    background: linear-gradient(to right, #4f8bf9, #9b53e6); /* Lighter shade for hover effect */
+    transform: scale(1.05); /* Slightly increase the size on hover */
+  }
+  
+  .cta-button.secondary {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+  }
+  
+  .cta-button.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  

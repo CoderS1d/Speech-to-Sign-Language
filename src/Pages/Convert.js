@@ -14,6 +14,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
+import posTagger from 'wink-pos-tagger'; // make sure this is installed and imported
+const tagger = posTagger();
+
 function Convert() {
   const [text, setText] = useState('');
   const [speed, setSpeed] = useState(0.1);
@@ -34,7 +37,7 @@ function Convert() {
     ref.characters = [];
 
     ref.scene = new THREE.Scene();
-    ref.scene.background = new THREE.Color(0x2b2b2b);
+    ref.scene.background = new THREE.Color(0x0C1020);
 
     const spotLight = new THREE.SpotLight(0xffffff, 2);
     spotLight.position.set(0, 5, 5);
@@ -115,18 +118,78 @@ function Convert() {
   };
 
   const sign = (inputRef) => {
-    const str = inputRef.current.value.toUpperCase();
-    const strWords = str.split(' ');
-    setText(str);
-
-    strWords.forEach((word) => {
-      if (words[word]) {
-        words[word](ref);
-      } else {
-        word.split('').forEach((ch) => {
-          alphabets[ch](ref);
-        });
-      }
+    const sentences = inputRef.current.value
+      .split(/[.?!]/)
+      .filter(sentence => sentence.trim() !== '');
+    
+    // List of small words to preserve
+    const preservedWords = new Set(['yes', 'no', 'a', 'an', 'the', 'hello', 'hi']);
+    
+    const processedSentences = sentences.map(sentence => {
+      const tagger = posTagger();
+      const taggedWords = tagger.tagSentence(sentence.trim());
+      
+      const verbTags = ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"];
+      const rearrangedWords = taggedWords.reduce((acc, word) => {
+        // Preserve words in our list regardless of their POS tag
+        if (preservedWords.has(word.value.toLowerCase())) {
+          acc.preserved.push(word);
+          return acc;
+        }
+        
+        if (verbTags.includes(word.pos)) {
+          if (word.lemma && !['be'].includes(word.lemma)) {
+            acc.verbs.push({ ...word, value: word.lemma || word.value });
+          }
+        } else if (word.pos === 'WP' || word.pos.startsWith('WH') || word.pos.startsWith('WR')) {
+          acc.whWords.push(word);
+        } else if (['NN', 'NNS', 'NNP', 'NNPS', 'PRP', 'JJ', 'JJR', 'JJS'].includes(word.pos)) {
+          if (acc.subjects.length === 0) {
+            acc.subjects.push(word);
+          } else {
+            acc.objects.push(word);
+          }
+        } else {
+          // If word doesn't match any category, preserve it in original position
+          acc.preserved.push(word);
+        }
+        return acc;
+      }, { 
+        subjects: [], 
+        objects: [], 
+        verbs: [], 
+        whWords: [],
+        preserved: [] // New array for preserved words
+      });
+      
+      // Combine all words while maintaining order for preserved words
+      const processedSentence = [
+        ...rearrangedWords.whWords,
+        ...rearrangedWords.subjects,
+        ...rearrangedWords.objects,
+        ...rearrangedWords.verbs,
+        ...rearrangedWords.preserved
+      ];
+      
+      return processedSentence
+        .map(word => word.value.toUpperCase())
+        .join(' ');
+    });
+    
+    setText(processedSentences.join('. '));
+    
+    // Process the words for signing
+    processedSentences.forEach(sentence => {
+      const sentenceWords = sentence.split(' ');
+      sentenceWords.forEach((word) => {
+        if (words[word]) {
+          words[word](ref);
+        } else {
+          word.split('').forEach((ch) => {
+            alphabets[ch](ref);
+          });
+        }
+      });
     });
   };
 

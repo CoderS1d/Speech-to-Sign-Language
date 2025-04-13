@@ -1,31 +1,37 @@
 import React from "react";
+import "./SplinePage.css"; // CSS styles remain mostly the same
+import { Link } from 'react-router-dom';
 
 const SplinePage = () => {
   return (
-    <div style={containerStyle}>
-      <iframe
-        src='https://my.spline.design/nexbotrobotcharacterconcept-acb2d23b489d12b9b2ac23214d490a6d/'
-        allowFullScreen
-        style={iframeStyle}
-      ></iframe>
+    <div className="spline-wrapper">
+      {/* Background and iframe */}
+      <div className="spline-container">
+        <iframe
+          src="https://my.spline.design/nexbotrobotcharacterconcept-Qj76BeB9ZRLSbtw3FxBjKWvd/"
+          allowFullScreen
+          className="spline-iframe"
+        ></iframe>
+      </div>
+
+      {/* Foreground content */}
+      <div className="spline-content">
+        <h1 className="headline">
+          Breaking <span className="gradient-text">Communication</span> Barriers
+        </h1>
+        <p className="description">
+          SignSpeak transforms spoken words into sign language in real-time, creating a bridge
+          between verbal and visual communication for the deaf and hard of hearing community.
+        </p>
+        <div className="button-group">
+        <Link to="/sign-kit/convert" className="cta-button primary">
+        Try SignSpeak Now
+      </Link>
+          
+        </div>
+      </div>
     </div>
   );
-};
-
-
-const containerStyle = {
-  width: "100vw",
-  height: "100vh",
-  //overflow: "hidden", // Removes scrollbar
-  position: "fixed",  // Ensures no extra space
-  top: 0,
-  left: 0,
-};
-
-const iframeStyle = {
-  width: "100vw",
-  height: "100vh",
-  border: "none",
 };
 
 export default SplinePage;
