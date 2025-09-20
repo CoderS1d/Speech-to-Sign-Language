@@ -1,3 +1,3 @@
 # Speech-to-Sign-Language
 
-https://speech-to-sign-language.vercel.app/sign-kit/home
+Live Demo: https://speech-to-sign-language.vercel.app/home
