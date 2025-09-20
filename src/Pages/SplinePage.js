@@ -1,5 +1,5 @@
 import React from "react";
-import "./SplinePage.css"; // CSS styles remain mostly the same
+import "./SplinePage.css"; 
 import { Link } from 'react-router-dom';
 
 const SplinePage = () => {
@@ -24,7 +24,7 @@ const SplinePage = () => {
           between verbal and visual communication for the deaf and hard of hearing community.
         </p>
         <div className="button-group">
-        <Link to="/sign-kit/convert" className="cta-button primary">
+        <Link to="/convert" className="cta-button primary">
         Try SignSpeak Now
       </Link>
           

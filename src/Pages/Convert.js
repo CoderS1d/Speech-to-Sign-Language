@@ -14,7 +14,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-import posTagger from 'wink-pos-tagger'; // make sure this is installed and imported
+import posTagger from 'wink-pos-tagger'; 
 const tagger = posTagger();
 
 function Convert() {
